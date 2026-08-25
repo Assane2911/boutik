@@ -46,6 +46,10 @@ st.markdown(
       div[data-testid="stMetricValue"] {{ color: #FFFFFF; font-size: 1.6rem; }}
       section[data-testid="stSidebar"] {{ background: {ENCRE}; }}
       section[data-testid="stSidebar"] * {{ color: #E8DFC8; }}
+      /* Les encadrés d'alerte gardent un texte sombre, sinon illisible */
+      section[data-testid="stSidebar"] div[data-testid="stAlert"] * {{
+          color: {ENCRE} !important;
+      }}
     </style>
     """,
     unsafe_allow_html=True,
@@ -62,8 +66,8 @@ def fcfa(valeur) -> str:
 # --------------------------------------------------------------------------
 
 COLONNES_REQUISES = {
-    "ventes": ["date_vente", "client_id", "produit_id", "quantite",
-               "montant_total", "montant_paye"],
+    "ventes": ["vente_id", "date_vente", "client_id", "produit_id", "quantite",
+               "mode_paiement", "montant_total", "montant_paye"],
     "produits": ["produit_id", "nom_produit", "categorie", "prix_achat",
                  "prix_vente", "stock_actuel", "seuil_alerte"],
     "clients": ["client_id", "nom_client", "quartier"],
@@ -148,10 +152,12 @@ with st.sidebar:
 
 if ventes is None or produits is None or clients is None:
     st.title("Boutik")
-    st.info(
-        "Aucune donnée à analyser pour l'instant. Choisissez « Boutique de "
-        "démonstration » dans la barre latérale, ou corrigez votre classeur "
-        "d'après le message affiché à gauche."
+    st.warning(
+        "Votre classeur n'a pas pu être lu. La raison exacte est indiquée en "
+        "rouge dans la barre latérale, sous le bouton de chargement — il s'agit "
+        "presque toujours d'une feuille ou d'une colonne manquante. Pour "
+        "continuer sans corriger le fichier, choisissez « Boutique de "
+        "démonstration » à gauche."
     )
     st.stop()
 
