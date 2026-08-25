@@ -146,6 +146,15 @@ with st.sidebar:
 # Préparation
 # --------------------------------------------------------------------------
 
+if ventes is None or produits is None or clients is None:
+    st.title("Boutik")
+    st.info(
+        "Aucune donnée à analyser pour l'instant. Choisissez « Boutique de "
+        "démonstration » dans la barre latérale, ou corrigez votre classeur "
+        "d'après le message affiché à gauche."
+    )
+    st.stop()
+
 ventes = ventes.merge(produits, on="produit_id", how="left").merge(
     clients, on="client_id", how="left"
 )
